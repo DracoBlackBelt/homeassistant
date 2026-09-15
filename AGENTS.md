@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Compact guide for OpenCode sessions. This is the canonical agent file; `CLAUDE.md` and `GEMINI.md` only point here.
+Compact guide for OpenCode sessions. This is the canonical agent file.
 
 ## What this is
 
