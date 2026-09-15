@@ -1,3 +1,5 @@
 module apps.homeassistant
 HomeassistantApp 1.0 HomeassistantApp.qml
 HomeassistantTile 1.0 HomeassistantTile.qml
+HomeassistantScreen 1.0 HomeassistantScreen.qml
+HomeassistantConfigurationScreen 1.0 HomeassistantConfigurationScreen.qml

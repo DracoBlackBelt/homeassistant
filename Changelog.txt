@@ -1,9 +1,37 @@
+2.0.0
+ - Fork rewrite of the ToonSoftwareCollective app (own repo, own standards).
+ - BREAKING: legacy api_password auth removed (dead since Home Assistant 2023.7); long-lived access token
+   in /mnt/data/tsc/homeassistant.token.txt is now the only auth. The 'Pass'/'Legacy' settings and the
+   separate sensors/scenes/sliders/switches/alarm side-files are gone; everything lives in
+   homeassistant.userSettings.json (old files are NOT migrated - reconfigure once).
+ - BREAKING: the 6-button "slider" (input_number hack) is removed from the UI.
+ - All icons now load from the app's own drawables/ (relative paths) instead of qrc:/tsc paths that do
+   not exist on current devices; button_on/off.png references (missing files) replaced by
+   backgroundOn/Off.png.
+ - Fixed: tile font/width operator-precedence bugs (5px clock text, 50px sensor labels on every device),
+   inverted toggle-switch images for switches 2-5, switch3 mixed-up off-image, ReferenceError when
+   typing a 5th alarm digit (bare "pass" in switch/default).
+ - Fixed: try/catch used inside QML property bindings (invalid as expression) replaced by safe app-side
+   helpers (sensorName/sensorValue/switchOn/...); no more binding errors or JSON.parse in UI files.
+ - Fixed: settings only persisted as a side effect of checkConnection - "Opslaan" now saves first, then
+   checks, and a stalled XHR can no longer lose input (watchdog Timer); config screen edits drafts and
+   discards on back.
+ - Fixed: unguarded homeAssistantScreen.* derefs at boot (crashed fetch callbacks before the screen
+   existed), unguarded JSON.parse on failed/error responses, token file being overwritten with an empty
+   file when unreadable.
+ - Added: reconnect retry (60 s poll doubles as connection retry), poll generation guard, log message
+   length cap, "Clock op tegel"/alarm features kept.
+ - Layout: screens rebuilt with Repeater/Grid/Column + ToggleSwitch/ToggleBlock components and isNxt
+   branches, so Toon 1 (400x240) is no longer clipped; all UI strings are qsTr() Dutch with lang/
+   sources matching.
+ - qmldir registers the screens explicitly (typed properties on the App).
+
 1.0.8
-- dimmableColors update
+ - dimmableColors update
 
 1.0.7
-- updated Tile layout for Toon 2 (thanks dEADkIRK)
+ - updated Tile layout for Toon 2 (thanks dEADkIRK)
 
 1.0.6
-- Images references changed to existing ones in the resource file (some will be available in future resource file releases).
-  JSON file is now filled correctly, so that Home Assistant works, by mAiden
+ - Images references changed to existing ones in the resource file (some will be available in future resource file releases).
+   JSON file is now filled correctly, so that Home Assistant works, by mAiden
