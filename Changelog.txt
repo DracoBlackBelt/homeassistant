@@ -1,3 +1,7 @@
+2.0.1
+ - Regenerated lang/*.qm from the current qsTr sources with lrelease (Qt 6.11); the shipped catalogs were stale upstream stubs with no entries.
+ - Verified all QML with qmllint (0 errors, only expected missing-device-module warnings) and lupdate round-trip (0 new/0 obsolete strings).
+
 2.0.0
  - Fork rewrite of the ToonSoftwareCollective app (own repo, own standards).
  - BREAKING: legacy api_password auth removed (dead since Home Assistant 2023.7); long-lived access token

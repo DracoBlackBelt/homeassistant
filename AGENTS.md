@@ -13,7 +13,7 @@ scp -O -r -oHostKeyAlgorithms=+ssh-rsa *.qml qmldir drawables root@<toon-ip>:/qm
 ssh -oHostKeyAlgorithms=+ssh-rsa root@<toon-ip> killall qt-gui
 ```
 
-`-O` (no sftp-server on device) and `+ssh-rsa` (old host key) are both required. Device dir is **unversioned** and icons use relative `drawables/...` paths, so `drawables/` must sit next to the QML. No local way to run QML; verification is careful reading (pure helper functions can be brace-extracted and sanity-checked with `node`).
+`-O` (no sftp-server on device) and `+ssh-rsa` (old host key) are both required. Device dir is **unversioned** and icons use relative `drawables/...` paths, so `drawables/` must sit next to the QML. No local way to run QML (the `qb.*`/`FileIO`/`BasicUIControls` modules only exist on the device). Static verification with the Qt6 install on the PC (Homebrew): `qmllint *.qml` — expect 0 *Error*s; the import/`Unqualified access`/`onShown` warnings are all the missing device modules and are also present for the known-working sonos files, so only new errors matter. `qmlformat <file> > /dev/null` (nonzero stderr = parse failure) and brace-extracted `node` checks of the pure helpers are the remaining pre-deploy checks.
 
 ## Home Assistant connection model (since 2.0.0 — upstream-era docs are wrong)
 
@@ -38,7 +38,7 @@ ssh -oHostKeyAlgorithms=+ssh-rsa root@<toon-ip> killall qt-gui
 
 - **ES5 only** — Qt5 JavaScriptCore: `var`, no `let`/`const`, no arrow functions, no template strings, no ES6 methods.
 - **No fetch API** — all HTTP and file writes via `XMLHttpRequest`.
-- UI strings are Dutch, wrapped in `qsTr()`; `lang/*.ts` match the current strings (regenerate `.qm` with `lrelease` on a Qt-equipped PC — none is installed here, shipped `.qm` are empty catalogs so Dutch source text is always shown).
+- UI strings are Dutch, wrapped in `qsTr()`; `lang/*.ts` match the current strings and the shipped `lang/*.qm` are compiled from them with the PC-side Qt6 `lrelease lang/*.ts` (Qt 6.11 message format still loads on the device's Qt5). Re-run `lrelease` in the same commit whenever a `qsTr()` string is added, changed or removed — a stale `.qm` silently shows the Dutch source instead.
 - Colors in dimmable contexts (tile): `(typeof dimmableColors !== 'undefined') ? dimmableColors.X : colors.X`.
 - Widget registration lives in `function init()`; `Component.onCompleted` only calls `updateClockInfo()` + `readSettings()`.
 
